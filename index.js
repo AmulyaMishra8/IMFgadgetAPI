@@ -49,14 +49,26 @@ app.post('/gadgets',authorization,async function(req,res){
     });
    
     
-    app.get('/gadgets',authorization, async function (req, res) {
+    app.get('/gadgets', authorization, async function (req, res) {
+        const { status } = req.query;
+        
         try {
-            const result = await client.query(`SELECT * FROM gadgets`);
+            let query = 'SELECT * FROM gadgets';
+            const values = [];
+     
+            if (status) {
+                query += ' WHERE status = $1';
+                values.push(status);
+            }
+     
+            const result = await client.query(query, values);
+            
+            // Add the description and success probability
             const formattedGadgets = result.rows.map(gadget => {
                 const successProbability = chance.integer({ min: 50, max: 100 });
-                return{
+                return {
                     id: gadget.id,
-                    name: gadget.name, 
+                    name: gadget.name,
                     description: `${gadget.name} - ${successProbability}% success probability`,
                     status: gadget.status
                 };
@@ -203,25 +215,6 @@ app.post('/gadgets',authorization,async function(req,res){
         }
      });
 
-     app.get('/gadgets',authorization, async function (req, res) {
-        const { status } = req.query;
-        
-        try {
-            let query = 'SELECT * FROM gadgets';
-            const values = [];
-     
-            if (status) {
-                query += ' WHERE status = $1';
-                values.push(status);
-            }
-     
-            const result = await client.query(query, values);
-            res.status(200).json(result.rows);
-        } catch (error) {
-            console.error("Error retrieving gadgets:", error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-     });
      module.exports = client;
 
     app.listen(port, () => {
