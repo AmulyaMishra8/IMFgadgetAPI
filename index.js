@@ -3,23 +3,27 @@ const { Client } = require('pg');
 const { uniqueNamesGenerator, adjectives, animals } = require('unique-names-generator');
 const Chance = require('chance');
 const { router: authRoutes, authorization } = require("./auth");
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
 
 
 
 const chance = new Chance();
-
+const swaggerDocument = YAML.load("./swagger.yaml");
 const client = new Client({
     connectionString:"postgresql://neondb_owner:npg_tEhQ6N8ZHRmB@ep-withered-meadow-a5b0jk9t-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
 });
 
 client.connect()
-.then(() => console.log("Connected to database"))
-.catch(err => console.error("Database connection error:", err));
+    .then(() => console.log("Connected to database"))
+    .catch(err => console.error("Database connection error:", err));
 
 const app = express();
 const port = 3000;
 app.use("/auth", authRoutes);
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.post('/gadgets',authorization,async function(req,res){
     const name = uniqueNamesGenerator({
