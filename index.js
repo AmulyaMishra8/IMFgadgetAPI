@@ -23,7 +23,7 @@ const port = 3000;
 app.use("/auth", authRoutes);
 app.use(express.json());
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.post('/gadgets',authorization,async function(req,res){
     const name = uniqueNamesGenerator({
