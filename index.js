@@ -20,8 +20,9 @@ client.connect()
 
 const app = express();
 const port = 3000;
-app.use("/auth", authRoutes);
 app.use(express.json());
+app.use("/auth", authRoutes);
+
 
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
