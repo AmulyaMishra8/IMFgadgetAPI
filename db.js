@@ -1,16 +1,12 @@
-const { Pool } = require("pg");
+const { Client } = require("pg");
 
-const pool = new Pool({
-    connectionString: "postgresql://neondb_owner:npg_tEhQ6N8ZHRmB@ep-withered-meadow-a5b0jk9t-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require",
-    max: 10,  // Max 10 connections
-    idleTimeoutMillis: 30000,  // Close idle connections after 30 seconds
-    connectionTimeoutMillis: 20000  // Timeout if DB doesn’t respond in 20s
+const client = new Client({
+    connectionString: "postgresql://neondb_owner:npg_tEhQ6N8ZHRmB@ep-withered-meadow-a5b0jk9t-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
 });
 
-// Function to initialize the table
-async function createGadgetsTable() {
-    const client = await pool.connect();
+async function initDatabase() {
     try {
+        await client.connect();
         console.log("Connected to database");
 
         // Ensure ENUM type is created safely
@@ -41,10 +37,8 @@ async function createGadgetsTable() {
         console.log("Gadgets table created successfully");
     } catch (error) {
         console.error("Error creating gadgets table:", error);
-    } finally {
-        client.release();  // ✅ Release instead of closing the connection
+        throw error;
     }
 }
 
-// Export pool for API routes
-module.exports = { pool, createGadgetsTable };
+module.exports = { client, initDatabase };
