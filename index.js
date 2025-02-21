@@ -87,7 +87,7 @@ async function startServer() {
                 const query = `
                     UPDATE gadgets 
                     SET status = $1
-                    WHERE id::text = $2::text 
+                    WHERE id = $2 
                     RETURNING *
                 `;
         
