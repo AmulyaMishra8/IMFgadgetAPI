@@ -19,7 +19,7 @@ async function startServer() {
         app.use(express.json());
         
         // Auth routes
-        app.use("/auth", authRoutes);
+         app.use("/auth", authRoutes);
 
         // Gadget routes
         app.post('/gadgets', authorization, async (req, res) => {
@@ -87,7 +87,7 @@ async function startServer() {
                 const query = `
                     UPDATE gadgets 
                     SET status = $1
-                    WHERE id = $2 
+                    WHERE id::text = $2::text 
                     RETURNING *
                 `;
         
