@@ -4,7 +4,7 @@ const Chance = require('chance');
 const { router: authRoutes, authorization } = require("./auth");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
-const { client, initDatabase } = require('./db');  // Assuming you've created db.js as shown earlier
+const { client, initDatabase } = require('./db');  
 
 const chance = new Chance();
 const app = express();
@@ -78,7 +78,6 @@ async function startServer() {
             const { id } = req.params;
             const { status } = req.body;
         
-            // UUID format validation
             const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
             if (!uuidRegex.test(id)) {
                 return res.status(400).json({ error: "Invalid UUID format" });
@@ -195,7 +194,6 @@ async function startServer() {
     }
 }
 
-// Handle cleanup on shutdown
 process.on('SIGTERM', async () => {
     try {
         await client.end();
@@ -206,5 +204,5 @@ process.on('SIGTERM', async () => {
     }
 });
 
-// Start the server
+
 startServer();

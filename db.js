@@ -9,7 +9,7 @@ async function initDatabase() {
         await client.connect();
         console.log("Connected to database");
 
-        // Ensure ENUM type is created safely
+        
         await client.query(`
             DO $$ BEGIN
                 IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'gadget_status') THEN
