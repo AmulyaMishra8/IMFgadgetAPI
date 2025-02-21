@@ -78,6 +78,12 @@ async function startServer() {
             const { id } = req.params;
             const { status } = req.body;
         
+            // UUID format validation
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(id)) {
+                return res.status(400).json({ error: "Invalid UUID format" });
+            }
+        
             const validStatuses = ['Available', 'Deployed'];
             if (!validStatuses.includes(status)) {
                 return res.status(400).json({ error: "Invalid status" });
@@ -87,7 +93,7 @@ async function startServer() {
                 const query = `
                     UPDATE gadgets 
                     SET status = $1
-                    WHERE id = $2 
+                    WHERE id = $2::uuid 
                     RETURNING *
                 `;
         

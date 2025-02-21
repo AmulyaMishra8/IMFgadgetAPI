@@ -32,7 +32,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         name:
           type: string
         description:
@@ -128,7 +129,8 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
         description: Gadget ID
 
     patch:
@@ -181,7 +183,8 @@ paths:
         name: id
         required: true
         schema:
-          type: integer
+          type: string
+          format: uuid
         description: Gadget ID
 
     post:
@@ -211,5 +214,3 @@ paths:
           description: Gadget not found
         '500':
           description: Internal Server Error
-
-          
