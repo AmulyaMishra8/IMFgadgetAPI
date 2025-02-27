@@ -4,11 +4,13 @@ const Chance = require('chance');
 const { router: authRoutes, authorization } = require("./auth");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
-const { client, initDatabase } = require('./db');  
+const { client, initDatabase } = require('./db'); 
+const cors = require("cors");
 
 const chance = new Chance();
 const app = express();
 const port = 3000;
+app.use(cors({ origin: "*" }));
 
 async function startServer() {
     try {
