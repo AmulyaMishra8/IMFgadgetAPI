@@ -1,159 +1,109 @@
-# IMFgadgetAPI 
+
+# 🕵️ IMF Gadget Inventory API
 
 ## Overview
 
-The **Gadgets API** is designed to manage gadgets securely with authentication using JWT (JSON Web Token). This API allows users to register, log in, and perform CRUD operations on gadgets, including updating their status and initiating a self-destruct sequence.
+The **IMF Gadget Inventory API** is a secure, production-ready RESTful API built to simulate real-world gadget tracking and lifecycle management for intelligence missions. It supports agent authentication, gadget registration, codename generation, soft deletion, and a self-destruct mechanism using confirmation codes.
 
-## Base URL
-
-```
-https://imfgadgetapi.onrender.com
-```
-
-## Authentication
-
-The API uses **Bearer Token Authentication**. Include the token in the `Authorization` header:
-
-```
-Authorization: Bearer <your_token>
-```
-
-## Endpoints
-
-### Authentication
-
-#### 1. Register a New User
-
-**Endpoint:** `POST /auth/register`
-
-**Request Body:**
-
-```json
-{
-  "username": "exampleUser",
-  "password": "examplePassword"
-}
-```
-
-**Responses:**
-
-- `200 OK` - User registered successfully
-- `400 Bad Request` - Username and password are required
-- `500 Internal Server Error` - Server error
-
-#### 2. User Login
-
-**Endpoint:** `POST /auth/login`
-
-**Request Body:**
-
-```json
-{
-  "username": "exampleUser",
-  "password": "examplePassword"
-}
-```
-
-**Responses:**
-
-- `200 OK` - Login successful, returns a JWT token
-- `401 Unauthorized` - Invalid credentials
-- `500 Internal Server Error` - Server error
+🔗 **Live Demo**: [https://imfgadgetapi.onrender.com](https://imfgadgetapi.onrender.com)
 
 ---
 
-### Gadgets
+## 🚀 Features
 
-#### 3. Create a New Gadget
+- ✅ JWT-based authentication and route protection  
+- 🧑‍💻 Secure user registration and login endpoints  
+- 🛰️ Gadget creation with auto-generated code names  
+- 🔄 Status-based gadget filtering and updates (`Available`, `Deployed`, etc.)  
+- 🗃️ Soft deletion for decommissioned gadgets  
+- 💣 Self-destruct sequence with randomized confirmation codes  
+- 📜 Swagger-based API documentation  
+- ☁️ Deployed on Render for scalability and uptime
 
-**Endpoint:** `POST /gadgets`
+---
 
-**Headers:**
+## 🛠 Tech Stack
 
-```
+- **Backend:** Node.js, Express.js  
+- **Database:** PostgreSQL  
+- **Authentication:** JWT  
+- **Documentation:** Swagger  
+- **Hosting:** Render
+
+---
+
+## 🔐 Authentication
+
+The API uses Bearer Token Authentication via JWT.
+
+Include the token in your `Authorization` header:
+
+```http
 Authorization: Bearer <your_token>
 ```
 
-**Responses:**
+---
 
-- `201 Created` - Gadget created successfully
-- `401 Unauthorized` - Authentication required
-- `500 Internal Server Error` - Server error
+## 📦 API Endpoints
 
-#### 4. Get All Gadgets
+### 🔑 Auth Routes
 
-**Endpoint:** `GET /gadgets`
+#### 1. Register
 
-**Headers:**
-
-```
-Authorization: Bearer <your_token>
-```
-
-**Query Parameters (Optional):**
-
-- `status` - Filter gadgets by status (`Available`, `Deployed`, `Decommissioned`, `Destroyed`)
-
-**Responses:**
-
-- `200 OK` - List of gadgets retrieved
-- `401 Unauthorized` - Authentication required
-- `500 Internal Server Error` - Server error
-
-#### 5. Update Gadget Status
-
-**Endpoint:** `PATCH /gadgets/{id}`
-
-**Headers:**
-
-```
-Authorization: Bearer <your_token>
-```
-
-**Request Body:**
+`POST /auth/register`
 
 ```json
 {
-  "status": "Available"  // Options: Available, Deployed
+  "username": "exampleUser",
+  "password": "examplePassword"
 }
 ```
 
-**Responses:**
+#### 2. Login
 
-- `200 OK` - Gadget status updated successfully
-- `400 Bad Request` - Invalid status
-- `401 Unauthorized` - Authentication required
-- `404 Not Found` - Gadget not found
-- `500 Internal Server Error` - Server error
+`POST /auth/login`
 
-#### 6. Decommission a Gadget
-
-**Endpoint:** `DELETE /gadgets/{id}`
-
-**Headers:**
-
-```
-Authorization: Bearer <your_token>
+```json
+{
+  "username": "exampleUser",
+  "password": "examplePassword"
+}
 ```
 
-**Responses:**
+> 🔁 Returns a JWT token upon successful login.
 
-- `200 OK` - Gadget decommissioned successfully
-- `401 Unauthorized` - Authentication required
-- `404 Not Found` - Gadget not found
-- `500 Internal Server Error` - Server error
+---
 
-#### 7. Self-Destruct a Gadget
+### 🧰 Gadget Routes
 
-**Endpoint:** `POST /gadgets/{id}/self-destruct`
+#### 3. Create Gadget
 
-**Headers:**
+`POST /gadgets`  
+_(Requires JWT Token)_
 
+#### 4. Get All Gadgets
+
+`GET /gadgets`  
+_(Optional filter: `status=Available|Deployed|Decommissioned|Destroyed`)_
+
+#### 5. Update Gadget Status
+
+`PATCH /gadgets/{id}`
+
+```json
+{
+  "status": "Available"
+}
 ```
-Authorization: Bearer <your_token>
-```
 
-**Request Body:**
+#### 6. Decommission Gadget
+
+`DELETE /gadgets/{id}`  
+_(Soft delete)_
+
+#### 7. Self-Destruct Gadget
+
+`POST /gadgets/{id}/self-destruct`
 
 ```json
 {
@@ -161,15 +111,9 @@ Authorization: Bearer <your_token>
 }
 ```
 
-**Responses:**
+---
 
-- `200 OK` - Self-destruct sequence completed successfully
-- `400 Bad Request` - Invalid confirmation code
-- `401 Unauthorized` - Authentication required
-- `404 Not Found` - Gadget not found
-- `500 Internal Server Error` - Server error
-
-## Gadget Object Structure
+## 🧱 Gadget Schema
 
 ```json
 {
@@ -180,17 +124,26 @@ Authorization: Bearer <your_token>
 }
 ```
 
-## Security
+---
 
-- Uses **JWT Authentication** for secure API access.
-- Ensures only authorized users can create, update, or delete gadgets.
+## 🧪 Test Credentials (Optional)
 
-## License
+If you'd like to offer test credentials, add a section like:
 
-This API is licensed under the MIT License.
+```md
+### 🧪 Test Credentials
+Username: agent007@imf.com  
+Password: secret007
+```
 
 ---
 
-**For any issues or improvements, feel free to contribute!**
+## 📜 License
 
+MIT License
 
+---
+
+## 🤝 Contributing
+
+Contributions, suggestions, and PRs are welcome!
